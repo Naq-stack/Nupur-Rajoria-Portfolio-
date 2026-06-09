@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@100..900&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --font-script: "Pinyon Script", cursive;
+  --font-cormorant: "Cormorant Garamond", serif;
+
+  --color-fusion-bg: #ffffff;
+  --color-fusion-ink: #000000;
+  --color-fusion-accent: #ff3e00; /* Campaign Red */
+  --color-fusion-secondary: #005aee; /* Campaign Blue */
+  --color-fusion-muted: #555555;
+  --color-fusion-card: #f9f9f9;
+  --color-fusion-border: #eeeeee;
+  --color-linkedin-blue: #0077b5;
+  --color-insta-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  --color-newspaper: #f4f1ea;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--color-fusion-bg)] text-[var(--color-fusion-ink)] font-sans antialiased;
+  }
+}
+
+.modern-jali {
+  background-image: radial-gradient(circle at 1px 1px, #ddd 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+.newspaper-paper {
+  @apply bg-[var(--color-newspaper)] text-black border-4 border-black/10 shadow-2xl;
+  font-family: var(--font-cormorant);
+}
+
+.linkedin-card {
+  @apply bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden;
+}
+
+.insta-grid {
+  @apply grid grid-cols-3 gap-1 md:gap-4;
+}
+
+.retro-store-shelf {
+  @apply border-b-8 border-gray-300 relative;
+  background: linear-gradient(transparent 90%, rgba(0,0,0,0.05) 100%);
+}
+
+.campaign-tag {
+  @apply px-4 py-1 bg-black text-white text-[10px] font-black uppercase tracking-tighter;
+}
+
+.bento-card {
+  @apply bg-[var(--color-fusion-card)] border border-[var(--color-fusion-border)] rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden relative;
+}
+
+.accent-pill {
+  @apply px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border;
+}
+
+.heading-display {
+  @apply font-serif text-6xl md:text-8xl tracking-tight leading-[0.9] font-medium text-[var(--color-fusion-ink)];
+}
+
+.signature {
+  @apply font-script text-4xl md:text-6xl text-[var(--color-fusion-accent)] opacity-80;
+}
+
+.fog-layer {
+  background: radial-gradient(circle at center, rgba(249, 241, 231, 0.2) 0%, transparent 70%);
+  filter: blur(80px);
+}
+
+.heavy-fog {
+  background: #f9f1e7;
+  filter: blur(120px);
+}
+
+.terracotta-bg {
+  background: radial-gradient(circle at center, #c66a5c 0%, #a64d43 60%, #7e241c 100%);
+}
+
+.jharokha-arch {
+  clip-path: polygon(0% 20%, 50% 0%, 100% 20%, 100% 90%, 80% 100%, 20% 100%, 0% 90%);
+}
+
+.lattice-pattern {
+  background-image: radial-gradient(circle, var(--color-lattice) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+.jharokha-gold-border {
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.floating-annotation {
+  @apply fixed pointer-events-none z-40 max-w-[200px] leading-tight opacity-0 transition-opacity duration-700;
+}
