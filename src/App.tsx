@@ -38,8 +38,13 @@ import {
   Sparkles,
   X,
   Pin,
+  UploadCloud,
+  Check,
+  AlertCircle,
+  Play,
 } from "lucide-react";
 import * as d3 from "d3";
+import { put } from "@vercel/blob";
 import ResumeModal from "./components/ResumeModal";
 
 // --- Components ---
@@ -400,7 +405,7 @@ const getMediaDetails = (label: string) => {
     case "AUTHENTIC STUDENT JOURNEY":
     case "AUTHENTIC STUDENT LIFE":
       return {
-        image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?q=80&w=600&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&auto=format&fit=crop",
         gradient: "from-amber-500/15 via-orange-500/10 to-transparent",
         color: "text-gray-950",
       };
@@ -589,7 +594,7 @@ const InstaFeedModal = ({
         <div
           ref={containerRef}
           onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-2xl h-screen md:h-[90vh] overflow-y-auto space-y-8 py-10 md:py-16 px-4 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent scroll-smooth"
+          className="w-full max-w-4xl h-screen md:h-[90vh] overflow-y-auto space-y-8 py-10 md:py-16 px-4 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent scroll-smooth"
         >
           {posts.map((post, idx) => (
             <div
@@ -598,7 +603,7 @@ const InstaFeedModal = ({
               className="bg-white rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl w-full border border-gray-150 min-h-[500px]"
             >
               {/* Media Section */}
-              <div className="w-full md:w-[350px] aspect-square relative shrink-0">
+              <div className="w-full md:w-1/2 aspect-square relative shrink-0">
                 <InstaMedia
                   i={idx + 1}
                   label={post.label}
@@ -729,6 +734,17 @@ const NewsColumn = ({
   );
 };
 
+export interface Reel {
+  id: string;
+  videoUrl: string;
+  caption: string;
+  username: string;
+  likes: number;
+  comments: number;
+  date: string;
+  isBlob: boolean;
+}
+
 export default function App() {
   const [timesPage, setTimesPage] = useState(1);
   const [storyOpen, setStoryOpen] = useState(false);
@@ -737,8 +753,31 @@ export default function App() {
     number | null
   >(null);
   const [activeCaseIndex, setActiveCaseIndex] = useState(0);
+  const [activeInstaTab, setActiveInstaTab] = useState<"posts" | "reels" | "saved">("posts");
   const [showCoffeeToast, setShowCoffeeToast] = useState(false);
   const [isContactOptionsOpen, setIsContactOptionsOpen] = useState(false);
+  const [blobUploading, setBlobUploading] = useState(false);
+  const [blobUrl, setBlobUrl] = useState<string | null>(null);
+
+  // Vercel Blob Reels & Video Upload State Management
+  const [reels, setReels] = useState<Reel[]>([
+    {
+      id: "reel-1",
+      videoUrl: "https://ihzztna9b14wuolg.public.blob.vercel-storage.com/2022%20Open%20Day/IMG_6647.mov",
+      caption: "Our high-impact 2022 Open Day! 🎓 Welcoming upcoming students and scholars from across the globe to the beautiful University of Bath campus. Peer-to-peer social strategy in action. #uob #openday #unilife #bath",
+      username: "nupur_rajoria",
+      likes: 3842,
+      comments: 189,
+      date: "June 23, 2026",
+      isBlob: true,
+    }
+  ]);
+  const [selectedReel, setSelectedReel] = useState<Reel | null>(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [manualToken, setManualToken] = useState("");
+  const [newCaption, setNewCaption] = useState("");
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleCoffeeClick = () => {
     navigator.clipboard.writeText("nupurrajoria@gmail.com");
@@ -748,6 +787,133 @@ export default function App() {
     }, 3500);
     // Open a mail client with pre-filled subject
     window.location.href = "mailto:nupurrajoria@gmail.com?subject=Let's%20discuss%2520over%2520coffee";
+  };
+
+  const handleSimulateBlobUpload = () => {
+    if (blobUploading) return;
+    setBlobUploading(true);
+    setBlobUrl(null);
+    setTimeout(() => {
+      setBlobUploading(false);
+      setBlobUrl("https://g9vj3oas1z.public.blob.vercel-storage.com/articles/blob-NupurRajoria.txt");
+    }, 1500);
+  };
+
+  // Drag & Drop & Browse handlers for Reels Section
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith("video/")) {
+        setSelectedFile(file);
+      } else {
+        setUploadProgress("Warning: please select a valid mp4/video file.");
+        setTimeout(() => setUploadProgress(null), 4000);
+      }
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.type.startsWith("video/")) {
+        setSelectedFile(file);
+      } else {
+        setUploadProgress("Warning: please select a valid mp4/video file.");
+        setTimeout(() => setUploadProgress(null), 4000);
+      }
+    }
+  };
+
+  const handleRealBlobUpload = async () => {
+    if (!selectedFile) {
+      setUploadProgress("Error: Please choose a video file first.");
+      setTimeout(() => setUploadProgress(null), 4000);
+      return;
+    }
+
+    setUploadProgress("Uploading via @vercel/blob put()...");
+
+    try {
+      const tokenToUse = manualToken.trim() || ((import.meta as any).env)?.VITE_BLOB_READ_WRITE_TOKEN || "";
+      let finalUrl = "";
+      let uploadedToBlob = false;
+
+      if (tokenToUse) {
+        // Run the actual requested code
+        const blobResult = await put(`articles/${Date.now()}-${selectedFile.name}`, selectedFile, {
+          access: "public",
+          token: tokenToUse,
+        });
+        finalUrl = blobResult.url;
+        uploadedToBlob = true;
+      } else {
+        // Fallback Sandbox preview ObjectURL
+        finalUrl = URL.createObjectURL(selectedFile);
+      }
+
+      const newReel: Reel = {
+        id: `reel-${Date.now()}`,
+        videoUrl: finalUrl,
+        caption: newCaption.trim() || `Authentic Student Journey: ${selectedFile.name} 📈 #bathuni #studentvoice #digitalcamp`,
+        username: "nupur_rajoria",
+        likes: Math.floor(Math.random() * 500) + 120,
+        comments: Math.floor(Math.random() * 25) + 6,
+        date: "Today",
+        isBlob: uploadedToBlob,
+      };
+
+      setReels((prev) => [newReel, ...prev]);
+      setSelectedFile(null);
+      setNewCaption("");
+      setUploadProgress(uploadedToBlob ? "Uploaded successfully to Vercel Blob!" : "Success! Local Sandbox Preview created (Input token to hit CDN).");
+      setTimeout(() => setUploadProgress(null), 5000);
+    } catch (err: any) {
+      console.error(err);
+      setUploadProgress(`Upload Failed: ${err.message || "Network exception during put()"}`);
+      setTimeout(() => setUploadProgress(null), 6000);
+    }
+  };
+
+  const useSampleVideo = () => {
+    const sampleVideos = [
+      "https://assets.mixkit.co/videos/preview/mixkit-student-in-library-looking-at-camera-40019-large.mp4",
+      "https://assets.mixkit.co/videos/preview/mixkit-students-walking-on-university-campus-4519-large.mp4",
+      "https://assets.mixkit.co/videos/preview/mixkit-group-of-students-studying-together-in-library-40018-large.mp4"
+    ];
+    const randomUrl = sampleVideos[Math.floor(Math.random() * sampleVideos.length)];
+    setUploadProgress("Simulating processing of student video...");
+    
+    setTimeout(() => {
+      const newReel: Reel = {
+        id: `reel-${Date.now()}`,
+        videoUrl: randomUrl,
+        caption: newCaption.trim() || "Dynamic student housing walkthrough! Authentic validation GTM 🌟 #bathuniversity #socialproof",
+        username: "nupur_rajoria",
+        likes: Math.floor(Math.random() * 400) + 200,
+        comments: Math.floor(Math.random() * 30) + 12,
+        date: "Today",
+        isBlob: false,
+      };
+      setReels((prev) => [newReel, ...prev]);
+      setNewCaption("");
+      setUploadProgress("Success! Loaded sample university video into Reels.");
+      setTimeout(() => setUploadProgress(null), 3500);
+    }, 1000);
   };
 
   const { scrollYProgress } = useScroll();
@@ -907,6 +1073,89 @@ export default function App() {
         onClose={() => setActiveInstaPostIndex(null)}
       />
 
+      {/* Reel Player Modal (Immersive smartphone mockup view) */}
+      <AnimatePresence>
+        {selectedReel && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[600] bg-black/95 backdrop-blur-xl flex items-center justify-center p-0 xs:p-2 sm:p-4"
+            onClick={() => setSelectedReel(null)}
+          >
+            <div 
+              className="relative bg-zinc-950 w-full max-w-sm h-full xs:h-[90vh] sm:h-[85vh] xs:rounded-3xl border border-zinc-800 overflow-hidden shadow-2xl flex flex-col justify-between"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header bar */}
+              <div className="absolute top-0 inset-x-0 bg-gradient-to-b from-black/80 to-transparent p-4 z-20 flex items-center justify-between text-white">
+                <div className="flex items-center space-x-3">
+                  <div className="text-left">
+                    <span className="text-xs font-black tracking-wide block uppercase tracking-widest">University of Bath</span>
+                    <span className="text-[9px] text-gray-300 block font-mono">Welcome Campaign</span>
+                  </div>
+                </div>
+                <button 
+                  type="button"
+                  onClick={() => setSelectedReel(null)}
+                  className="w-8 h-8 rounded-full bg-black/30 flex items-center justify-center hover:bg-black/60 hover:scale-105 transition cursor-pointer"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              {/* Video Player Main Stream */}
+              <div className="flex-1 w-full relative flex items-center justify-center bg-black">
+                <video
+                  src={selectedReel.videoUrl}
+                  autoPlay
+                  loop
+                  controls
+                  playsInline
+                  className="w-full h-full object-cover xs:rounded-3xl"
+                  referrerPolicy="no-referrer"
+                />
+                
+                {/* Floater overlay actions like likes, comment counts */}
+                <div className="absolute right-4 bottom-28 z-20 flex flex-col items-center space-y-6 text-white text-xs font-bold">
+                  <button className="group flex flex-col items-center focus:outline-none transition hover:scale-110 cursor-pointer">
+                    <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-red-600/30">
+                      <Heart size={18} className="fill-current text-white group-hover:text-red-500 transition-colors" />
+                    </div>
+                    <span className="mt-1 text-[9px] drop-shadow font-mono">{selectedReel.likes}</span>
+                  </button>
+                  <button className="group flex flex-col items-center focus:outline-none transition hover:scale-110 cursor-pointer">
+                    <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-[#ff3e00]/30">
+                      <MessageCircle size={18} className="text-white group-hover:text-[#ff3e00] transition-colors" />
+                    </div>
+                    <span className="mt-1 text-[9px] drop-shadow font-mono">{selectedReel.comments}</span>
+                  </button>
+                  <button className="group flex flex-col items-center focus:outline-none transition hover:scale-110 cursor-pointer">
+                    <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-amber-500/30">
+                      <Bookmark size={18} className="text-white group-hover:text-amber-500 transition-colors" />
+                    </div>
+                    <span className="mt-1 text-[9px] drop-shadow font-mono">SAVE</span>
+                  </button>
+                </div>
+
+                {/* Bottom text overlay */}
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-5 pt-12 z-10 text-white text-left">
+                  <div className="space-y-1.5 max-w-[85%]">
+                    <p className="text-[11px] leading-relaxed font-sans font-medium">
+                      {selectedReel.caption}
+                    </p>
+                    <div className="flex items-center space-x-1.5 text-[9px] text-gray-300 font-mono">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Published {selectedReel.date}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ==========================================
           0. COVER PAGE
           ========================================== */}
@@ -1052,14 +1301,14 @@ export default function App() {
                 animate={{ opacity: 1, rotateY: 0, x: 0 }}
                 exit={{ opacity: 0, rotateY: 10, x: -20 }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="newspaper-paper p-12 md:p-24 space-y-16 relative"
+                className="newspaper-paper p-6 xs:p-10 md:p-16 space-y-12 md:space-y-16 relative"
               >
-                <div className="text-center space-y-8 border-b-4 border-black pb-12">
-                  <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.5em]">
+                <div className="text-center space-y-6 sm:space-y-8 border-b-4 border-black pb-8 sm:pb-12">
+                  <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.5em]">
                     <span>Times Special</span>
                     <span>2019 - 2021</span>
                   </div>
-                  <h1 className="text-[22px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-black tracking-tighter leading-none italic uppercase whitespace-nowrap">
+                  <h1 className="text-[16px] xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-black tracking-tighter leading-none italic uppercase whitespace-nowrap">
                     The Times Group.
                   </h1>
                   <div className="flex justify-center space-x-12 text-[10px] font-black uppercase tracking-widest opacity-60">
@@ -1122,14 +1371,14 @@ export default function App() {
                 animate={{ opacity: 1, rotateY: 0, x: 0 }}
                 exit={{ opacity: 0, rotateY: -10, x: 20 }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="newspaper-paper p-12 md:p-24 space-y-16 relative"
+                className="newspaper-paper p-6 xs:p-10 md:p-16 space-y-12 md:space-y-16 relative"
               >
-                <div className="text-center space-y-8 border-b-4 border-black pb-12">
-                  <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.5em]">
+                <div className="text-center space-y-6 sm:space-y-8 border-b-4 border-black pb-8 sm:pb-12">
+                  <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.5em]">
                     <span>Special Edition</span>
                     <span>2019 - 2021 Special Edition</span>
                   </div>
-                  <h1 className="text-[22px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-black tracking-tighter leading-none italic uppercase whitespace-nowrap">
+                  <h1 className="text-[16px] xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-black tracking-tighter leading-none italic uppercase whitespace-nowrap">
                     The Times Group.
                   </h1>
                   <div className="flex justify-center space-x-12 text-[10px] font-black uppercase tracking-widest opacity-60">
@@ -1287,42 +1536,164 @@ export default function App() {
           {/* Instagram Grid Divider */}
           <div className="space-y-12">
             <div className="flex justify-center border-t border-gray-150">
-              <div className="flex space-x-16 -mt-px">
-                <div className="flex items-center space-x-2 py-4 border-t border-black cursor-pointer">
-                  <div className="w-3 h-3 border border-black grid grid-cols-2 gap-[1px] p-[1px]">
-                    <div className="bg-black" /> <div className="bg-black" />{" "}
-                    <div className="bg-black" /> <div className="bg-black" />
+              <div className="flex space-x-12 sm:space-x-16 -mt-px">
+                <button
+                  type="button"
+                  onClick={() => setActiveInstaTab("posts")}
+                  className={`flex items-center space-x-2 py-4 border-t-2-clean cursor-pointer transition-all ${
+                    activeInstaTab === "posts"
+                      ? "border-t border-black text-black font-black"
+                      : "border-t border-transparent text-gray-400 hover:text-gray-900"
+                  }`}
+                >
+                  <div className={`w-3 h-3 border grid grid-cols-2 gap-[1px] p-[1px] ${
+                    activeInstaTab === "posts" ? "border-black" : "border-gray-400"
+                  }`}>
+                    <div className={activeInstaTab === "posts" ? "bg-black" : "bg-gray-400"} />
+                    <div className={activeInstaTab === "posts" ? "bg-black" : "bg-gray-400"} />
+                    <div className={activeInstaTab === "posts" ? "bg-black" : "bg-gray-400"} />
+                    <div className={activeInstaTab === "posts" ? "bg-black" : "bg-gray-400"} />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-widest">
+                  <span className="text-[10px] uppercase tracking-widest">
                     Posts
                   </span>
-                </div>
-                <div className="flex items-center space-x-2 py-4 text-gray-400 cursor-pointer hover:text-black transition-colors">
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveInstaTab("reels")}
+                  className={`flex items-center space-x-2 py-4 border-t-2-clean cursor-pointer transition-all ${
+                    activeInstaTab === "reels"
+                      ? "border-t border-black text-black font-black"
+                      : "border-t border-transparent text-gray-400 hover:text-gray-900"
+                  }`}
+                >
                   <Clapperboard size={14} />
-                  <span className="text-[10px] font-black uppercase tracking-widest">
+                  <span className="text-[10px] uppercase tracking-widest">
                     Reels
                   </span>
-                </div>
-                <div className="flex items-center space-x-2 py-4 text-gray-400 cursor-pointer hover:text-black transition-colors">
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveInstaTab("saved")}
+                  className={`flex items-center space-x-2 py-4 border-t-2-clean cursor-pointer transition-all ${
+                    activeInstaTab === "saved"
+                      ? "border-t border-black text-black font-black"
+                      : "border-t border-transparent text-gray-400 hover:text-gray-900"
+                  }`}
+                >
                   <Bookmark size={14} />
-                  <span className="text-[10px] font-black uppercase tracking-widest">
+                  <span className="text-[10px] uppercase tracking-widest">
                     Saved
                   </span>
-                </div>
+                </button>
               </div>
             </div>
 
-            {/* Responsive Feed Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-              {bathPosts.map((post, idx) => (
-                <InstaPostCard
-                  key={post.id}
-                  index={idx}
-                  post={post}
-                  onClick={() => setActiveInstaPostIndex(idx)}
-                />
-              ))}
-            </div>
+            {/* Responsive Feed Grid / Reels / Saved Viewports */}
+            <AnimatePresence mode="wait">
+              {activeInstaTab === "posts" && (
+                <motion.div
+                  key="posts"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                  className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
+                >
+                  {bathPosts.map((post, idx) => (
+                    <InstaPostCard
+                      key={post.id}
+                      index={idx}
+                      post={post}
+                      onClick={() => setActiveInstaPostIndex(idx)}
+                    />
+                  ))}
+                </motion.div>
+              )}
+
+              {activeInstaTab === "reels" && (
+                <motion.div
+                  key="reels"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                  className="max-w-4xl mx-auto"
+                >
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                    {reels.map((reel, idx) => (
+                      <div
+                        key={reel.id}
+                        className="group relative cursor-pointer aspect-[9/16] bg-zinc-950 rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                        onClick={() => setSelectedReel(reel)}
+                      >
+                        {/* Real-time background Video loop */}
+                        <video
+                          src={reel.videoUrl}
+                          muted
+                          loop
+                          playsInline
+                          autoPlay
+                          className="w-full h-full object-cover select-none pointer-events-none"
+                          referrerPolicy="no-referrer"
+                        />
+
+                        {/* Hover Overlay with standard metrics */}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 z-10">
+                          <div className="flex justify-end">
+                            <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+                              <Play size={14} className="fill-current ml-0.5" />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2 text-white text-left">
+                            <p className="text-[11px] font-sans font-bold line-clamp-2 leading-relaxed">
+                              {reel.caption}
+                            </p>
+                            
+                            <div className="flex items-center space-x-4 text-[10px] font-mono text-gray-200">
+                              <div className="flex items-center space-x-1">
+                                <Heart size={11} className="fill-current text-white" />
+                                <span>{reel.likes}</span>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <MessageCircle size={11} className="text-white" />
+                                <span>{reel.comments}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Soft bottom gradient to protect text on dark backing */}
+                        <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent pointer-events-none group-hover:opacity-0 transition-opacity" />
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {activeInstaTab === "saved" && (
+                <motion.div
+                  key="saved"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  className="max-w-md mx-auto text-center py-12 space-y-4"
+                >
+                  <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto border border-gray-150 shadow-inner">
+                    <Bookmark className="text-gray-400" size={24} />
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-gray-950 uppercase tracking-wider text-xs">Saved Creative Assets</h4>
+                    <p className="text-xs text-gray-500 max-w-xs mx-auto leading-relaxed">
+                      Your bookmarked moodboards, creative typography grids, and style guidelines from the University of Bath collections are saved here.
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </section>
