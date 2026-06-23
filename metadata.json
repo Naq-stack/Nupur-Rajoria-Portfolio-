@@ -2,5 +2,7 @@
   "name": "Rajoria: The Campaign Portfolio",
   "description": "A high-impact marketing portfolio presented as a series of ad campaigns, featuring LinkedIn, Instagram, Newspaper, and Retail-inspired storytelling modules.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

@@ -36,9 +36,11 @@ import {
   ShoppingCart,
   Trash2,
   Sparkles,
+  X,
+  Pin,
 } from "lucide-react";
 import * as d3 from "d3";
-import CoffeeModal from "./components/CoffeeModal";
+import ResumeModal from "./components/ResumeModal";
 
 // --- Components ---
 
@@ -73,8 +75,8 @@ const Typewriter = ({ text, delay = 0 }: { text: string; delay?: number }) => {
   );
 };
 
-const Navbar = ({ onCoffeeClick }: { onCoffeeClick: () => void }) => (
-  <nav className="fixed top-0 left-0 right-0 z-[100] px-8 py-6 flex justify-between items-center bg-white/90 backdrop-blur-md border-b border-gray-100">
+const Navbar = () => (
+  <nav className="fixed top-0 left-0 right-0 z-[100] px-4 sm:px-8 py-4 sm:py-6 flex justify-between items-center bg-white/90 backdrop-blur-md border-b border-gray-100">
     <div className="flex items-center space-x-4">
       <div className="w-12 h-10 bg-black text-white flex items-center justify-center font-black tracking-tighter rounded-lg shadow-lg text-sm">
         N.R.
@@ -83,30 +85,22 @@ const Navbar = ({ onCoffeeClick }: { onCoffeeClick: () => void }) => (
         Portfolio.
       </span>
     </div>
-    <div className="hidden md:flex space-x-8 text-[11px] font-black uppercase tracking-widest text-gray-400">
+    <div className="hidden lg:flex space-x-6 xl:space-x-8 text-[10px] xl:text-[11px] font-black uppercase tracking-widest text-gray-400">
       <a
         href="#hungaro-linkedin"
         className="hover:text-black transition-colors"
       >
-        HungaroTrial
+        HUNGAROTRIAL: Influencing CXOs
       </a>
       <a href="#times-newspaper" className="hover:text-black transition-colors">
-        The Times Group
+        THE TIMES GROUP: Influencing a country
       </a>
       <a href="#bath-insta" className="hover:text-black transition-colors">
-        University of Bath
-      </a>
-      <a href="#kenvue-store" className="hover:text-black transition-colors">
-        Kenvue
+        UNIVERSITY OF BATH: Influencing globally
       </a>
     </div>
     <div className="flex items-center space-x-4">
-      <div
-        onClick={onCoffeeClick}
-        className="px-5 py-2 bg-black text-white text-[10px] font-bold uppercase rounded-full shadow-lg cursor-pointer hover:bg-[#ff3e00] transition-all"
-      >
-        Coffee
-      </div>
+      {/* Resume Button Removed */}
     </div>
   </nav>
 );
@@ -276,7 +270,7 @@ const LinkedInPost = ({
                 />
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 md:p-12 space-y-10">
+              <div className="flex-1 overflow-y-auto p-5 xs:p-8 md:p-12 space-y-8 md:space-y-10">
                 <div className="space-y-4">
                   <h3 className="text-3xl font-black uppercase tracking-tighter text-gray-950 leading-none">
                     {title}
@@ -320,9 +314,8 @@ const LinkedInPost = ({
                 </div>
               </div>
 
-              <div className="p-6 border-t border-gray-100 bg-gray-50 text-center flex justify-between items-center text-[8px] font-black uppercase tracking-[0.4em] text-gray-400">
+              <div className="p-6 border-t border-gray-100 bg-gray-50 text-center flex justify-center items-center text-[8px] font-black uppercase tracking-[0.4em] text-gray-400">
                 <span>HungaroTrial Case Study</span>
-                <span>Ref: HT-LKD-21</span>
               </div>
             </motion.div>
           </motion.div>
@@ -353,7 +346,7 @@ const StoryModal = ({
           initial={{ scale: 0.8, opacity: 0, y: 50 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.8, opacity: 0, y: 50 }}
-          className="relative w-full max-w-[380px] h-[80vh] md:h-[720px] bg-white rounded-[3rem] border-[10px] border-gray-900 shadow-3xl overflow-hidden flex flex-col items-center justify-center p-10 text-center space-y-12"
+          className="relative w-full max-w-[380px] h-fit max-h-[85vh] md:h-[720px] bg-white rounded-[3rem] border-[10px] border-gray-900 shadow-3xl overflow-y-auto flex flex-col items-center justify-center p-6 xs:p-10 text-center space-y-6 xs:space-y-12"
           onClick={(e) => e.stopPropagation()}
         >
           {/* iPhone Notch */}
@@ -396,122 +389,99 @@ const StoryModal = ({
   </AnimatePresence>
 );
 
+const getMediaDetails = (label: string) => {
+  switch (label) {
+    case "ENGAGEMENT GAP":
+      return {
+        image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=600&auto=format&fit=crop",
+        gradient: "from-[#faf5f5]/95 to-[#f5eae8]/95",
+        color: "text-gray-900",
+      };
+    case "AUTHENTIC STUDENT JOURNEY":
+    case "AUTHENTIC STUDENT LIFE":
+      return {
+        image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?q=80&w=600&auto=format&fit=crop",
+        gradient: "from-[#fafaf7]/95 to-[#f5f0e6]/95",
+        color: "text-gray-900",
+      };
+    case "WORKFLOW STANDARDIZATION":
+    case "DATA-DRIVEN DEPLOYMENT":
+      return {
+        image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=600&auto=format&fit=crop",
+        gradient: "from-[#f4f7fa]/95 to-[#e6edf5]/95",
+        color: "text-gray-900",
+      };
+    case "PEER VALIDATION ROI":
+    case "PEER VALIDATION":
+      return {
+        image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=600&auto=format&fit=crop",
+        gradient: "from-[#f2faf7]/95 to-[#e2f5ec]/95",
+        color: "text-gray-900",
+      };
+    case "REPLICABLE BLUEPRINT":
+    case "FUTURE BLUEPRINT":
+      return {
+        image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=600&auto=format&fit=crop",
+        gradient: "from-[#faf9fc]/95 to-[#eae7f5]/95",
+        color: "text-gray-900",
+      };
+    default:
+      return {
+        image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=600&auto=format&fit=crop",
+        gradient: "from-[#fcfcfc]/95 to-[#f5f5f5]/95",
+        color: "text-gray-900",
+      };
+  }
+};
+
 const InstaMedia = ({
   label,
   i,
-  letter,
   bgColor,
 }: {
   label: string;
   i: number;
-  letter?: string;
   bgColor: string;
 }) => {
+  const media = getMediaDetails(label);
+
   return (
-    <div className="w-full h-full bg-[#f4f1ea] text-black border border-black/15 flex flex-col items-between justify-between p-5 text-center relative overflow-hidden h-full select-none">
+    <div className="w-full h-full text-gray-900 border border-gray-100 flex flex-col justify-between p-5 text-center relative overflow-hidden select-none bg-white">
+      {/* Background Image with ReferrerPolicy No-Referrer */}
+      {media.image && (
+        <img
+          src={media.image}
+          alt={label}
+          referrerPolicy="no-referrer"
+          className="absolute inset-0 w-full h-full object-cover z-0 grayscale opacity-45"
+        />
+      )}
+      {/* Gradient Overlay for high-end text readability */}
+      <div className={`absolute inset-0 bg-gradient-to-tr ${media.gradient} z-10`} />
+      
       {/* Background paper texture & subtle grid line */}
       <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        className="absolute inset-0 opacity-[0.03] pointer-events-none z-20"
         style={{
           backgroundImage:
             "radial-gradient(circle at 1px 1px, #000 1px, transparent 0)",
           backgroundSize: "16px 16px",
         }}
       />
-      <div className="absolute inset-0 border border-black/[0.03] pointer-events-none m-2" />
+      <div className="absolute inset-0 border border-black/[0.04] pointer-events-none m-2 z-20" />
 
       {/* Card Header Tag - Consistent across all cards */}
-      <span className="font-mono text-[8px] font-black uppercase text-red-700 tracking-[0.3em] block z-10">
+      <span className="font-mono text-[8px] font-black uppercase text-[#ff3e00] tracking-[0.3em] block relative z-20">
         Phase {String(i).padStart(2, "0")}
       </span>
 
       {/* Graphical Showcase - Centered illustration */}
-      <div className="flex-1 w-full flex items-center justify-center relative z-10 py-2 overflow-hidden">
-        {label === "ENGAGEMENT GAP" && (
-          <div className="w-full max-w-[120px] flex flex-col space-y-2 opacity-80">
-            <div className="flex justify-between text-[7px] font-black tracking-widest text-black/40">
-              <span>REACH</span>
-              <span>RESONANCE</span>
-            </div>
-            <div className="relative h-2 bg-black/10 rounded-full overflow-hidden flex justify-between items-center px-1">
-              <div className="w-4 h-full bg-black rounded-l-full" />
-              <div className="h-0.5 flex-1 border-t border-dashed border-black/40 mx-2" />
-              <div className="w-8 h-full bg-red-700 rounded-r-full" />
-            </div>
-          </div>
-        )}
-
-        {label === "AUTHENTIC STUDENT LIFE" && (
-          <div className="relative flex items-center justify-center">
-            {/* The polaroid picture style! Extremely beautiful, completely robust and never gets student images cut */}
-            <div className="bg-white p-2 pb-5 border border-black/10 shadow-md rotate-[-3deg] w-24 h-28 flex flex-col relative">
-              {/* Profile card instead of random cropped student pictures */}
-              <div className="flex-1 bg-gray-50 flex items-center justify-center overflow-hidden border border-black/5 rounded">
-                <Users
-                  size={28}
-                  strokeWidth={1.5}
-                  className="text-black/60 translate-y-0.5"
-                />
-              </div>
-              <div className="absolute bottom-1.5 left-0 right-0 text-center">
-                <span className="font-serif italic text-[7px] tracking-tight text-black/60">
-                  Bath Campus
-                </span>
-              </div>
-            </div>
-            {/* Companion shadow student icon next to it */}
-            <div className="absolute -right-3 -top-2 bg-white/70 backdrop-blur-sm p-1.5 border border-black/5 rounded-full shadow-sm rotate-[12deg]">
-              <User size={14} className="text-red-700" />
-            </div>
-          </div>
-        )}
-
-        {label === "DATA-DRIVEN DEPLOYMENT" && (
-          <div className="w-full max-w-[120px] h-12 flex items-end justify-between px-1 opacity-80">
-            {[35, 65, 45, 85, 70].map((h, idx) => (
-              <div
-                key={idx}
-                className="w-3.5 rounded-t-sm transition-all duration-500"
-                style={{
-                  height: `${h}%`,
-                  backgroundColor: idx === 3 ? "#ff3e00" : "#000000",
-                }}
-              />
-            ))}
-          </div>
-        )}
-
-        {label === "200% GROWTH ACHIEVEMENT" && (
-          <div className="flex flex-col items-center justify-center">
-            <span className="font-serif text-3xl font-black italic tracking-tighter leading-none text-red-700">
-              200%
-            </span>
-            <span className="text-[7px] font-black uppercase tracking-widest text-black/40 mt-1">
-              Sustained Growth
-            </span>
-          </div>
-        )}
-
-        {label === "PEER VALIDATION" && (
-          <div className="w-16 h-16 border-2 border-dashed border-black/20 rounded-full flex flex-col items-center justify-center p-1 font-serif italic text-[11px] leading-tight opacity-80">
-            <div className="font-bold text-red-700">Audit</div>
-            <div className="text-[6px] uppercase font-sans font-black tracking-widest text-black/40">
-              Verified
-            </div>
-          </div>
-        )}
-
-        {label === "FUTURE BLUEPRINT" && (
-          <div className="w-20 h-10 border border-dashed border-black/25 flex items-center justify-center relative opacity-70">
-            <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-black/25" />
-            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-black/25" />
-            <div className="w-5 h-5 rounded-full border border-black bg-white" />
-          </div>
-        )}
+      <div className="flex-1 w-full flex items-center justify-center relative z-20 py-2 overflow-hidden">
+        {/* Overlays removed to keep photos clean and pristine as requested */}
       </div>
 
-      {/* Card Footer Label - Balanced and completely aligned */}
-      <span className="font-black text-[9px] uppercase tracking-[0.25em] text-black leading-tight block z-10 md:px-2">
+      {/* Card Footer Label */}
+      <span className="font-black text-[9px] uppercase tracking-[0.25em] text-gray-900 leading-tight block relative z-20 md:px-2">
         {label}
       </span>
     </div>
@@ -541,18 +511,18 @@ const InstaPostCard = ({
       transition={{ delay: index * 0.08 }}
       viewport={{ once: true }}
       onClick={onClick}
-      className="aspect-square relative group cursor-pointer overflow-hidden rounded-xl border border-gray-100 shadow-sm"
+      className="aspect-square relative group cursor-pointer overflow-hidden rounded-xl border border-gray-150 shadow-sm"
     >
-      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 flex flex-col items-center justify-center text-white space-y-2">
-        <div className="flex space-x-4 font-bold text-sm">
+      <div className="absolute inset-0 bg-white/95 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 flex flex-col items-center justify-center text-gray-900 space-y-2">
+        <div className="flex space-x-4 font-black tracking-widest text-[#ff3e00] text-[10px]">
           <div className="flex items-center space-x-1">
-            <Heart fill="white" size={16} /> <span>143</span>
+            <Heart fill="#ff3e00" size={12} className="text-[#ff3e00]" /> <span>143</span>
           </div>
           <div className="flex items-center space-x-1">
-            <MessageCircle fill="white" size={16} /> <span>12</span>
+            <MessageCircle fill="#ff3e00" size={12} className="text-[#ff3e00]" /> <span>12</span>
           </div>
         </div>
-        <p className="text-[9px] uppercase font-black tracking-widest px-4 text-center">
+        <p className="text-[9px] uppercase font-black tracking-[0.15em] px-4 text-center text-gray-900">
           {post.label}
         </p>
       </div>
@@ -757,57 +727,25 @@ const NewsColumn = ({
   );
 };
 
-// --- Kenvue Strategic Lead (STAR Framework) ---
-const StarCard = ({
-  letter,
-  title,
-  body,
-  i,
-}: {
-  letter: string;
-  title: string;
-  body: string;
-  i: number;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ delay: i * 0.1 }}
-    viewport={{ once: true }}
-    className="bg-white p-10 rounded-2xl border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] space-y-6 group hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-500"
-  >
-    <div className="flex items-center justify-between">
-      <div className="w-12 h-12 rounded-full border-2 border-fusion-accent flex items-center justify-center text-fusion-accent font-black text-xl group-hover:bg-fusion-accent group-hover:text-white transition-colors">
-        {letter}
-      </div>
-      <div className="h-px flex-1 bg-gray-50 mx-6" />
-      <Plus
-        size={16}
-        className="text-gray-200 group-hover:text-fusion-accent transition-colors"
-      />
-    </div>
-    <div className="space-y-3">
-      <h4 className="text-xl font-black uppercase tracking-tighter text-gray-950">
-        {title}
-      </h4>
-      <p className="text-sm text-gray-500 leading-relaxed font-serif italic">
-        {body}
-      </p>
-    </div>
-  </motion.div>
-);
-
 export default function App() {
   const [timesPage, setTimesPage] = useState(1);
   const [storyOpen, setStoryOpen] = useState(false);
-  const [isCoffeeOpen, setIsCoffeeOpen] = useState(false);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [activeInstaPostIndex, setActiveInstaPostIndex] = useState<
     number | null
   >(null);
   const [activeCaseIndex, setActiveCaseIndex] = useState(0);
-  const [kenvueTab, setKenvueTab] = useState<
-    "challenge" | "audit" | "execution" | "impact" | "qr_analysis"
-  >("challenge");
+  const [showCoffeeToast, setShowCoffeeToast] = useState(false);
+
+  const handleCoffeeClick = () => {
+    navigator.clipboard.writeText("nupurrajoria@gmail.com");
+    setShowCoffeeToast(true);
+    setTimeout(() => {
+      setShowCoffeeToast(false);
+    }, 3500);
+    // Open a mail client with pre-filled subject
+    window.location.href = "mailto:nupurrajoria@gmail.com?subject=Let's%20discuss%2520over%2520coffee";
+  };
 
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
@@ -816,21 +754,21 @@ export default function App() {
   const cases = [
     {
       shortTitle: "ABM Lead Gen",
-      title: "Case Study 01: 200+ Leads.",
-      body: "Architecting a high-touch, account-based social strategy targeting US and EU pharmaceutical sponsors to bypass clinical noise and capture high-intent inbound RFP inquiries.",
+      title: "Case Study 01: 200+ MQLs.",
+      body: "Architecting a high-touch ABM social strategy targeting US and EU sponsors to capture high-intent inbound RFP enquiries.",
       metric: "200+",
-      stats: "B2B Leads Generated",
+      stats: "B2B MQLs Generated",
       accentColor: "#0077b5",
       star: {
         situation:
-          "Clinical trial sponsor procurement is highly relationship-driven, where conventional generic cold outreach often faces massive resistance from busy VC-backed and pharma decision makers.",
-        task: "Bypass typical B2B digital noise to establish immediate operational authority and fuel a robust commercial sales funnel.",
+          "The company was failing to communicate with its relevant audiences through the right channels to be available at the right place and time to develop high-functioning relationships, meaning conventional cold outreach faced massive resistance.",
+        task: "To bypass this barrier, I suggested establishing a social strategy to be in front of the right audiences and the right target companies to generate high-quality leads.",
         action:
-          "Developed and executed an Account-Based Marketing (ABM) strategy on LinkedIn, deploying role-based segmentations and educational thought leadership that addressed trial execution risks.",
+          "I developed and executed an ABM strategy on LinkedIn, deploying role-based segmentation and educational thought leadership content that addressed trial execution risks while promoting the brand's services.",
         result:
           "Forged high-trust connect points with key US and EU sponsor leads, feeding them highly relevant regulatory insights and localized execution proof-points.",
         reaction:
-          "Successfully generated over 200+ qualified B2B leads, converting our organic social presence into an active commercial pipeline engine.",
+          "Successfully generated over 200+ marketing qualified B2B leads (MQLs), leading to high-quality SQLs (sales-qualified leads). The management saw the clear merit in implementing this strategy and now highly encourages active LinkedIn campaigns to attract audiences and build trust.",
       },
     },
     {
@@ -842,14 +780,14 @@ export default function App() {
       accentColor: "#005582",
       star: {
         situation:
-          "CRO selection requires solid regulatory and regional trust. Static corporate announcements and standard press updates failed to differentiate the brand from larger competitors.",
-        task: "Elevate brand visibility globally where physical sales teams lacked deep local footprint, using content as an active brand authority driver.",
+          "The CRO selection process requires solid regulatory and regional trust. The existing strategy of static corporate announcements and standard press updates did not capture or differentiate the brand from larger competitors, prompting a need for a quick change.",
+        task: "I realized that we needed to make the brand visible globally by using content that would actually leave the audience with valuable learning or speak directly to the specific problem statements they faced.",
         action:
-          "Shifted focus to SEO-optimized, highly helpful regulatory guides, partnering with company leaders to deliver clinical execution analysis of complex FDA/EMA policies.",
+          "I shifted our focus to SEO-optimized, highly helpful regulatory guides and shared learnings from FDA and EMA policies.",
         result:
-          "Built a reliable publishing tempo that positioned HungaroTrial as the regional subject matter expert for international trial sponsors.",
+          "The result was incredible. Over the years, we built a reliable publishing tempo that positions the brand HungaroTrial as an expert organization that can seamlessly conduct studies and serve as an authority for international trial sponsors.",
         reaction:
-          "Scaled followings from 1,900 to 7,000 (+270%) while securing consistent improvements in profile visits and organic inbound search keywords.",
+          "This growth was highly noticed by management as our follower count jumped from 1,900 to 7,000 followers, leading to over 270% growth while securing consistent improvements in profile visits and organic inbound search keywords.",
       },
     },
     {
@@ -861,12 +799,12 @@ export default function App() {
       accentColor: "#003b5c",
       star: {
         situation:
-          "Device developers faced high search fatigue navigating the primary molecule-heavy corporate site. This caused bounce rates to spike for this high-margin sector.",
-        task: "Consolidate device trial specifications into a fast, dedicated entry hub built for frictionless information discovery.",
+          "There was a separate, dormant site that existed for htdevice.com which was not generating any leads or interest, leading to an increased bounce rate for this sector.",
+        task: "I recognized this issue and suggested that we update and link this site to the main website to generate high-quality interest and reduce the bounce rate.",
         action:
-          "Led development of htdevice.com: structuring direct conversion pathways, benefit-led layouts, and explicit regulatory compliance maps.",
+          "I developed a revised htdevice.com site, structuring direct conversation pathways, benefit-oriented layouts, and explicit regulatory compliance maps to funnel traffic to the main company website.",
         result:
-          "Created a focused digital path that clearly answered device-safety standards and separated drug from non-drug requirements.",
+          "As a result, this created a focused digital path that clearly answered medical device safety standards and cleanly separated drug from non-drug trials.",
         reaction:
           "Delivered a 10% direct lift in high-intent referral traffic to the parent site, converting casual technical lookups into active partnership briefs.",
       },
@@ -885,7 +823,7 @@ export default function App() {
         action:
           "Built custom writing structures and automated analytics dashboards that unified reporting data across LinkedIn organic and Google Analytics 4 (GA4).",
         result:
-          "Decoupled asset asset generation speed from raw manual hours, enabling faster testing of creative ad/SEO copy in real-time.",
+          "Decoupled asset generation speed from raw manual hours, enabling faster testing of creative ad/SEO copy in real-time.",
         reaction:
           "Reduced content creation cycles by over 40% while freeing up critical hours for qualitative performance modeling and GTM strategy.",
       },
@@ -956,9 +894,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar onCoffeeClick={() => setIsCoffeeOpen(true)} />
+      <Navbar />
       <StoryModal isOpen={storyOpen} onClose={() => setStoryOpen(false)} />
-      <CoffeeModal isOpen={isCoffeeOpen} onClose={() => setIsCoffeeOpen(false)} />
+      <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
       <InstaFeedModal
         isOpen={activeInstaPostIndex !== null}
         initialIndex={activeInstaPostIndex}
@@ -971,7 +909,7 @@ export default function App() {
           ========================================== */}
       <section
         id="campaign-launch"
-        className="min-h-screen flex flex-col items-center justify-center pt-32 px-8 overflow-hidden relative bg-white"
+        className="min-h-screen flex flex-col items-center justify-center pt-32 px-4 sm:px-8 overflow-hidden relative bg-white"
       >
         <div className="absolute inset-0 modern-jali opacity-[0.03]" />
 
@@ -983,7 +921,7 @@ export default function App() {
             <div className="px-6 py-2 border-2 border-black text-black text-[10px] font-black uppercase tracking-[0.5em] rounded-full">
               The Portfolio Campaign
             </div>
-            <h1 className="text-7xl md:text-9xl lg:text-[11.5rem] leading-[0.8] font-black uppercase tracking-tighter text-gray-950">
+            <h1 className="text-5xl sm:text-7xl md:text-9xl lg:text-[11.5rem] leading-[0.8] font-black uppercase tracking-tighter text-gray-950">
               Creative <br /> Strategy <br />{" "}
               <span className="text-[#ff3e00]">Audit.</span>
             </h1>
@@ -1023,7 +961,7 @@ export default function App() {
                 <span className="text-[#0077b5]">Insight.</span>
               </h2>
               <p className="text-gray-500 font-serif italic text-lg xs:text-xl leading-relaxed">
-                Our strategic communications and digital acquisition channels were developed specifically for CXO level decision makers including Directors, VPs, and CEOs within biotech and pharmaceutical sponsor organizations globally.
+                Formulating strategic communication and digital acquisition channel strategies for engaging CXO-level decision-makers, including Directors, VPs, and CEOs within biotech and pharmaceutical sponsor organizations globally.
               </p>
               <div className="pt-4 lg:pt-8 grid grid-cols-2 gap-4">
                 <div>
@@ -1102,7 +1040,7 @@ export default function App() {
           2. THE TIMES GROUP SECTION (Second Project)
           ========================================== */}
       <section id="times-newspaper" className="py-24 bg-white scroll-mt-32">
-        <div className="max-w-5xl mx-auto px-8 relative">
+        <div className="max-w-5xl mx-auto px-4 xs:px-6 sm:px-8 relative">
           <AnimatePresence mode="wait">
             {timesPage === 1 ? (
               <motion.div
@@ -1132,7 +1070,7 @@ export default function App() {
                   <NewsColumn
                     headline="Influencing High-Stakes Investment."
                     animate={false}
-                    text="Transitioning into the B2B sphere required a highly targeted, strategic shift in mindset. Our communications and campaign narratives were developed specifically for key enterprise partners, including CXO level decision makers, VPs, and Directors across top-tier brand portfolios, alongside mass India-based reader audiences. This dual-focus approach redefined Advertiser Brand Loyalty and reader retention through authoritative, data-led GTM storytelling."
+                    text="Transitioning into the B2B sphere required a highly targeted, strategic shift in mindset. Our communications and campaign narratives were developed specifically for key enterprise partners, including CXO-level decision-makers, VPs, and Directors across top-tier brand portfolios, alongside mass India-based reader audiences. This dual-focus approach redefined Advertiser Brand Loyalty and reader retention through authoritative, data-led GTM storytelling."
                     i={1}
                   />
                   <div className="space-y-12">
@@ -1154,8 +1092,8 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="pt-16 pr-8 border-t-2 border-black flex flex-col md:flex-row justify-between items-center gap-12 relative">
-                  <div className="flex space-x-12 text-sm font-bold uppercase tracking-tighter">
+                <div className="pt-16 pr-0 md:pr-8 border-t-2 border-black flex flex-col md:flex-row justify-between items-center gap-8 md:gap-12 relative">
+                  <div className="flex flex-wrap justify-center md:justify-start gap-x-6 sm:gap-x-12 gap-y-2 text-xs sm:text-sm font-bold uppercase tracking-tighter text-center">
                     <span>Marketing Report</span>
                     <span>Crisis Strategy</span>
                     <span>Editorial Review</span>
@@ -1201,49 +1139,49 @@ export default function App() {
                 <div className="grid md:grid-cols-2 gap-16 md:gap-24">
                   <div className="space-y-12">
                     <div className="space-y-4">
-                      <div className="campaign-tag w-fit">National Archive</div>
-                      <h3 className="font-serif text-5xl font-bold leading-none tracking-tight">
-                        B2B2C Nationwide Drive: Mass Engagement.
+                      <div className="campaign-tag w-fit bg-black text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">B2B2C NATIONWIDE DRIVE</div>
+                      <h3 className="font-serif text-3xl font-black italic tracking-tight leading-none uppercase">
+                        MASS ENGAGEMENT
                       </h3>
                     </div>
                     <NewsColumn
-                      headline="SITUATION: Reader Fragmentation."
-                      text="Print media faces subscription attrition as consumer focus transitions to digital feeds. To reverse this pattern and protect our high-margin advertising real estate, we needed to design a nationwide interactive campaign format that united digital and print channels into a single, high-dwell narrative."
+                      headline="SITUATION"
+                      text="Traditional newspaper readership was fragmenting. The challenge was reversing the trend and driving high-intent nationwide excitement."
                       i={1}
                     />
                   </div>
                   <div className="space-y-12">
                     <NewsColumn
-                      headline="INITIATIVE: Cross-Media Synergy."
-                      text="We launched a multi-channel interactive format spanning Digital, Print, and Broadcast. By anchoring core clues in print and routing answers through social threads on Instagram and LinkedIn discussions, we built a rhythmic loop that converted passive readers into an active community."
+                      headline="INITIATIVE"
+                      text="Conceived and led a nationwide interactive challenge: an innovative format spanning Television, LinkedIn, and Instagram to mobilize dynamic audience connection."
                       i={2}
                     />
-                    <div className="bg-gray-100 p-8 rounded-lg border-2 border-dashed border-black/10 space-y-6">
+                    <div className="bg-gray-50 p-8 rounded-lg border-2 border-dashed border-black/10 space-y-6">
                       <div className="space-y-2">
-                        <span className="text-[9px] font-black uppercase text-gray-400 tracking-wider">
+                        <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider">
                           IMPLEMENTATION
                         </span>
-                        <p className="text-xs text-gray-700 leading-relaxed font-sans">
-                          We secured tier-1 advertiser sponsorships from global consumer brands to fund the interactive reward ecosystem. This co-branding strategy elevated campaign credibility while allowing partners to capture organic interest directly from our highly engaged B2B and B2C audiences.
+                        <p className="text-sm font-serif italic text-gray-800 leading-relaxed">
+                          Partnered with global brands to anchor the contest in print while driving traffic across digital loops: reinforcing each channel.
                         </p>
                       </div>
 
-                      <div className="space-y-2 border-t border-black/5 pt-4">
-                        <div className="flex items-center space-x-3 text-red-700">
+                      <div className="space-y-2 border-t border-black/10 pt-4">
+                        <div className="flex items-center space-x-3 text-red-700 mb-2">
                           <Plus size={16} />
-                          <span className="text-xs font-bold font-sans uppercase">
-                            RESULTS & BUSINESS REASONING
+                          <span className="text-[10px] font-black font-sans uppercase tracking-widest">
+                            RESULTS & RECOGNITION
                           </span>
                         </div>
-                        <p className="text-xs text-gray-700 leading-relaxed font-sans">
-                          Awarded the prestigious INMA Global Media Award for "Best Idea to Encourage Reader Engagement". Beyond driving a 20% year-on-year increase in user interaction, the campaign provided a validated, highly profitable GTM template that secured advertiser commitments for subsequent quarters.
+                        <p className="text-sm font-sans text-gray-900 font-bold leading-relaxed">
+                          Won the INMA Global Media Award for 'Best Idea to Encourage Reader Engagement' and created a replicable marketing asset.
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-16 pr-8 border-t-2 border-black flex flex-col md:flex-row justify-between items-center gap-12 relative">
+                <div className="pt-16 pr-0 md:pr-8 border-t-2 border-black flex flex-col md:flex-row justify-between items-center gap-8 md:gap-12 relative">
                   <button
                     onClick={() => setTimesPage(1)}
                     className="group flex items-center space-x-3 text-xs font-black uppercase tracking-widest hover:text-[#ff3e00] transition-colors cursor-pointer"
@@ -1256,7 +1194,7 @@ export default function App() {
                     <span>Previous Page</span>
                   </button>
 
-                  <div className="flex space-x-12 text-sm font-bold uppercase tracking-tighter">
+                  <div className="flex flex-wrap justify-center md:justify-start gap-x-6 sm:gap-x-12 gap-y-2 text-xs sm:text-sm font-bold uppercase tracking-tighter text-center">
                     <span>Digital Synergy</span>
                     <span>Audience Loops</span>
                     <span>Conversion Hub</span>
@@ -1297,11 +1235,11 @@ export default function App() {
 
           {/* Instagram Profile Header */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-8 xs:gap-12">
-            <div className="flex items-center space-x-8">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-6 sm:gap-8 w-full">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 onClick={() => setStoryOpen(true)}
-                className="w-40 h-40 rounded-full p-1 bg-gradient-to-tr from-[#f09433] to-[#bc1888] shadow-2xl cursor-pointer relative group"
+                className="w-40 h-40 rounded-full p-1 bg-gradient-to-tr from-[#f09433] to-[#bc1888] shadow-2xl cursor-pointer relative shrink-0 group"
               >
                 <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-[#f09433] to-[#bc1888] animate-pulse opacity-50 group-hover:opacity-100 transition-opacity" />
                 <div className="w-full h-full rounded-full border-4 border-white bg-white flex flex-col items-center justify-center overflow-hidden relative z-10 transition-colors group-hover:bg-gray-50">
@@ -1310,13 +1248,13 @@ export default function App() {
                   </div>
                 </div>
               </motion.div>
-              <div className="space-y-4">
-                <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <div className="space-y-4 flex-1 w-full">
+                <div className="flex flex-col md:flex-row md:items-center justify-center sm:justify-start gap-4">
                   <h3 className="text-2xl font-bold">
                     Marketing_University of Bath
                   </h3>
                 </div>
-                <div className="flex space-x-12 text-xs">
+                <div className="flex justify-center sm:justify-start space-x-6 xs:space-x-12 text-sm xs:text-xs">
                   <div>
                     <b>158</b> posts
                   </div>
@@ -1331,8 +1269,8 @@ export default function App() {
                   <div className="text-xs font-black text-gray-950 uppercase tracking-tighter">
                     INSTAGRAM STRATEGY
                   </div>
-                  <p className="text-sm text-gray-600 max-w-sm leading-relaxed">
-                    Designed high-performing organic social campaigns and creative content guidelines developed specifically for existing and upcoming students and studies from across the world, driving dynamic peer engagement and strategic student recruitment during critical university welcome cycles.
+                  <p className="text-sm text-gray-600 max-w-sm sm:max-w-md mx-auto sm:mx-0 leading-relaxed">
+                    Designed high-performing organic social campaigns and creative content guidelines developed specifically for existing and upcoming students and scholars from across the world, driving dynamic peer engagement and strategic student recruitment during critical university welcome cycles.
                     <br />
                     <span className="text-[10px] font-bold text-gray-400 mt-2 block">
                       Key Tools: Canva, Sprout Social
@@ -1386,292 +1324,60 @@ export default function App() {
         </div>
       </section>
 
-      <section
-        id="kenvue-store"
-        className="py-20 xs:py-24 md:py-32 bg-slate-50 text-gray-900 relative overflow-hidden scroll-mt-28"
-      >
-        {/* Modernist Storefront Facade Window Panes (Thin silver metal grid partitions) */}
-        <div className="absolute inset-0 pointer-events-none z-10 opacity-40 select-none">
-          {/* Outer boutique frame borders */}
-          <div className="absolute inset-0 border-y-2 border-gray-200" />
-          {/* Vertical glass pane seam lines */}
-          <div className="absolute left-1/3 top-0 bottom-0 w-[1px] bg-gradient-to-b from-gray-300/40 via-gray-200/10 to-transparent hidden lg:block" />
-          <div className="absolute left-2/3 top-0 bottom-0 w-[1px] bg-gradient-to-b from-gray-300/40 via-gray-200/10 to-transparent hidden lg:block" />
-          {/* Horizontal transom bar typical of high-end storefront windows */}
-          <div className="absolute top-[15%] left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-        </div>
-
-        {/* Ambient Backlighting (Store aisle internal glow peering through window glaze) */}
-        <div className="absolute top-[10%] left-[15%] w-[250px] xs:w-[350px] h-[250px] xs:h-[350px] rounded-full bg-gradient-to-br from-[#ff3e00]/5 to-transparent blur-[110px] pointer-events-none" />
-        <div className="absolute bottom-[15%] right-[10%] w-[350px] xs:w-[450px] h-[350px] xs:h-[450px] rounded-full bg-gradient-to-br from-orange-400/5 to-transparent blur-[140px] pointer-events-none" />
-        <div className="absolute top-[40%] right-[30%] w-[200px] h-[200px] rounded-full bg-blue-300/5 blur-[90px] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 xs:px-6 sm:px-8 relative z-25 w-full">
-               {/* Store Window Glass Decals / Subtle framing signage representing active store presence */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-200/80 pb-6 mb-10 xs:mb-14 sm:mb-16 gap-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-[#ff3e00] rounded-full animate-pulse shadow-[0_0_8px_#ff3e00]" />
-              <span className="text-[10px] xs:text-xs font-black uppercase tracking-[0.3em] text-[#ff3e00] drop-shadow-[0_0_5px_rgba(255,62,0,0.2)]">
-                Storefront Window: Audits & Executions
-              </span>
-            </div>
-            <div className="text-[9px] xs:text-[10px] font-mono text-gray-400 uppercase tracking-widest font-bold">
-              EST. 2026 // FACADE REFLECTION LEVEL P-04
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xs:gap-10 lg:gap-14 xl:gap-16 items-start">
-            
-            {/* Left Column: Store Decal Plaque (Frosted light glassmorphism layout card hanging on window) */}
-            <div className="lg:col-span-12 xl:col-span-5 space-y-6 sm:space-y-8 lg:sticky lg:top-36 h-fit w-full backdrop-blur-xl bg-white/70 border border-gray-200/80 rounded-3xl p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.9)] relative overflow-hidden transition-all duration-500 hover:border-gray-300">
-              {/* Glossy glare sweeping line */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-gray-100/10 to-transparent pointer-events-none" />
-              <div className="absolute top-0 left-0 right-0 h-[1.2px] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
-
-              <div className="flex items-center space-x-4 text-[#ff3e00]">
-                <div className="h-px w-8 bg-[#ff3e00]" />
-                <span className="font-black uppercase tracking-[0.35em] text-[8.5px] xs:text-[9.5px]">
-                  Visual Merchandising Blueprint
-                </span>
-              </div>
-
-              {/* Title replicating storefront lettering */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 bg-[#ff3e00]/10 border border-[#ff3e00]/20 rounded-2xl text-[#ff3e00] shadow-[0_4px_12px_rgba(255,62,0,0.1)] shrink-0">
-                    <ShoppingBag size={22} className="text-[#ff3e00]" />
-                  </div>
-                  <h2 className="text-3xl xs:text-4xl sm:text-5xl lg:text-3xl xl:text-4.5xl font-black uppercase tracking-tighter text-gray-950 leading-none">
-                    Kenvue <span className="text-[#ff3e00] drop-shadow-[0_0_8px_rgba(255,62,0,0.2)]">Shopper</span> <br /> Audit.
-                  </h2>
-                </div>
-                <p className="text-gray-650 font-serif italic text-sm xs:text-base sm:text-lg leading-relaxed pt-1">
-                  Bridging the gap between clinical formulation values and physical retail shelves. Our strategic blueprints were developed specifically for mass UK shopper audiences evaluating health, household, and personal care products for daily household usage, restructuring the in-aisle navigational architecture to drive brand-led education and intuitive premium portfolio discovery.
-                </p>
-              </div>
-
-              <div className="border-t border-gray-150 pt-6 space-y-3">
-                <div className="text-[9px] font-black uppercase tracking-widest text-[#ff3e00]">
-                  Core Product Marketing Objectives:
-                </div>
-                <ul className="space-y-2 text-xs text-gray-500 font-mono">
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ff3e00] font-bold mt-0.5">•</span>
-                    <span>Simplify clinical concepts to enable self-guided selection on self-service shelves.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ff3e00] font-bold mt-0.5">•</span>
-                    <span>Transform traditional retail clutter into structured, visual, benefits-led story blocks.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ff3e00] font-bold mt-0.5">•</span>
-                    <span>Drive multi-product basket attachment by mapping logical skincare and care regimens.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Right Column: Interactive Diagnostic Glass Window Panel */}
-            <div className="lg:col-span-12 xl:col-span-7 bg-white/70 backdrop-blur-xl p-5 xs:p-6 sm:p-8 md:p-10 rounded-3xl border border-gray-200/80 shadow-[0_25px_60px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.9)] min-h-[500px] w-full overflow-hidden relative transition-all duration-500 hover:border-gray-300">
-              
-              {/* Outer storefront window glare decal lines */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-gray-55/5 to-transparent pointer-events-none" />
-              <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-
-              {/* Horizontal Case tabs representing boutique sections */}
-              <div className="flex border-b border-gray-200 mb-8 overflow-x-auto scrollbar-none gap-2 pb-1.5 -mx-4 px-4 sm:mx-0 sm:px-0">
-                {[
-                  { id: "challenge", label: "01. The Challenge" },
-                  { id: "audit", label: "02. Shopper Strategy" },
-                  { id: "impact", label: "03. Strategic Impact" },
-                ].map((item) => {
-                  const active = kenvueTab === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => setKenvueTab(item.id as any)}
-                      className={`pb-3 px-3 sm:px-5 text-[10px] sm:text-[11px] md:text-xs font-black uppercase tracking-[0.12em] sm:tracking-[0.2em] border-b-2 transition-all duration-300 relative shrink-0 cursor-pointer min-h-[44px] flex items-center justify-center ${
-                        active
-                          ? "border-[#ff3e00] text-[#ff3e00] drop-shadow-[0_0_8px_rgba(255,62,0,0.3)] font-black"
-                          : "border-transparent text-gray-400 hover:text-gray-900"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <AnimatePresence mode="wait">
-                {kenvueTab === "challenge" && (
-                  <motion.div
-                    key="challenge"
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-1">
-                      <span className="text-[9px] xs:text-[10px] font-black uppercase tracking-[0.25em] text-[#ff3e00] block">
-                        Category Positioning & Friction
-                      </span>
-                      <h3 className="text-xl xs:text-2xl sm:text-3xl font-black uppercase tracking-tight text-gray-950">
-                        In-Aisle Friction & Passive Selection
-                      </h3>
-                    </div>
-
-                    <p className="text-sm xs:text-base text-gray-650 font-serif italic leading-relaxed">
-                      "While high-density health and personal care categories command steady foot traffic, products frequently face severe shopping barriers when shelf structures prioritize raw item density over intuitive benefits."
-                    </p>
-
-                    <div className="space-y-4 pt-2">
-                      <div className="p-4 sm:p-5 bg-red-50/50 rounded-2xl border border-gray-150 space-y-1">
-                        <span className="text-[10px] font-black uppercase text-[#ff3e00] tracking-wider block">
-                          Friction Point: Decision Paralysis
-                        </span>
-                        <p className="text-xs text-gray-700 leading-relaxed">
-                          Unstructured shelf density leads to choice frustration. Shoppers default back to passive habit patterns or exit the aisle without exploring adjacent high-efficacy formulations.
-                        </p>
-                      </div>
-
-                      <div className="p-4 sm:p-5 bg-red-50/50 rounded-2xl border border-gray-150 space-y-1">
-                        <span className="text-[10px] font-black uppercase text-[#ff3e00] tracking-wider block">
-                          Friction Point: Proposition Deficit
-                        </span>
-                        <p className="text-xs text-gray-700 leading-relaxed">
-                          Standard commercial packaging elements fail to communicate doctor-recommended clinical value in rapid-decision, self-guided shelf environments.
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {kenvueTab === "audit" && (
-                  <motion.div
-                    key="audit"
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-1">
-                      <span className="text-[9px] xs:text-[10px] font-black uppercase tracking-[0.25em] text-[#ff3e00] block">
-                        Shopper Journey Insights
-                      </span>
-                      <h3 className="text-xl xs:text-2xl sm:text-3xl font-black uppercase tracking-tight text-gray-950">
-                        Eyeline Hotspots & Benefit-Led Layouts
-                      </h3>
-                    </div>
-
-                    <p className="text-sm xs:text-base text-gray-650 font-serif italic leading-relaxed">
-                      "Analyzing physical pharmacy lanes revealed clear browsing behaviors. By converting passive eye-level scanning into intentional content triggers, we reorganized standard planograms for natural discoverability."
-                    </p>
-
-                    <div className="space-y-4 pt-2">
-                      <div className="p-4 sm:p-5 bg-gray-50 rounded-2xl border border-gray-150 space-y-1">
-                        <span className="text-[10px] font-black uppercase text-gray-900 tracking-wider block">
-                          Active Anchors at Eyeline
-                        </span>
-                        <p className="text-xs text-gray-700 leading-relaxed">
-                          By placing distinct shopper benefit headers at prime touchpoints, we disrupt habitual viewing paths and guide attention toward high-value treatment segments.
-                        </p>
-                      </div>
-
-                      <div className="p-4 sm:p-5 bg-gray-50 rounded-2xl border border-gray-150 space-y-1">
-                        <span className="text-[10px] font-black uppercase text-gray-900 tracking-wider block">
-                          Frictionless Regimen Pairings
-                        </span>
-                        <p className="text-xs text-gray-700 leading-relaxed">
-                          Grouping complementary products under logical treatment stages directly improves average basket attachment and cross-discovery without adding sensory clutter.
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {kenvueTab === "impact" && (
-                  <motion.div
-                    key="impact"
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-1">
-                      <span className="text-[9px] xs:text-[10px] font-black uppercase tracking-[0.25em] text-[#ff3e00] block">
-                        Proven Omnichannel Outcomes & Playbooks
-                      </span>
-                      <h3 className="text-xl xs:text-2xl sm:text-3xl font-black uppercase tracking-tight text-gray-950 border-none font-sans">
-                        POS Playbooks & QR Retail Analysis
-                      </h3>
-                    </div>
-
-                    <p className="text-sm xs:text-base text-gray-650 font-serif italic leading-relaxed">
-                      "By modeling multi-year, interactive QR scan data across target pharmacy accounts, we translated hidden offline actions into clear retail visual guides, delivering steady trade-up growth."
-                    </p>
-
-                    <div className="space-y-4 pt-2">
-                      <div className="p-4 sm:p-5 bg-gradient-to-br from-[#ff3e00]/5 to-transparent border border-[#ff3e00]/15 rounded-2xl space-y-1">
-                        <span className="text-[10px] font-black uppercase text-[#ff3e00] tracking-wider block">
-                          Boots & Superdrug Implementation
-                        </span>
-                        <p className="text-xs text-gray-700 leading-relaxed">
-                          Converted stagnant scan stats into physical planogram rules. Custom height-optimized QR visual layouts were integrated into retail guides—reducing consumer hesitation and boosting self-directed learning in-store.
-                        </p>
-                      </div>
-
-                      <div className="p-4 sm:p-5 bg-gradient-to-br from-[#ff3e00]/5 to-transparent border border-[#ff3e00]/15 rounded-2xl space-y-1">
-                        <span className="text-[10px] font-black uppercase text-[#ff3e00] tracking-wider block">
-                          Category Uplift & Trade Value
-                        </span>
-                        <p className="text-xs text-gray-700 leading-relaxed">
-                          The structured retail playbooks empower international sales teams to deploy localized, evidence-based setups, securing strong commercial commitments and protecting total lane productivity.
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-40 bg-black text-white relative flex flex-col items-center">
+      <section className="py-24 md:py-40 bg-white text-gray-950 border-t border-b border-gray-100 relative flex flex-col items-center scroll-mt-32">
         <div className="max-w-4xl text-center space-y-8 mb-20 px-8">
-          <div className="accent-pill inline-block border-white/20 text-white/40">
+          <div className="accent-pill inline-block border-gray-200 text-gray-400 bg-gray-50/50 uppercase text-[9px] font-black tracking-widest px-4 py-1.5 rounded-full border">
             Campaign Planning
           </div>
-          <h2 className="text-6xl font-black tracking-tighter uppercase leading-none">
+          <h2 className="text-4xl sm:text-6xl font-black tracking-tighter uppercase leading-none text-black">
             Synergy & <br />
             <span className="text-fusion-accent">Strategy Cluster.</span>
           </h2>
         </div>
 
-        <div className="w-full h-[600px] bg-gray-900/50 rounded-[4rem] border border-white/10 mx-6 relative overflow-hidden">
-          <div className="absolute inset-0 modern-jali opacity-[0.05]" />
+        <div className="w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] max-w-7xl h-[450px] md:h-[600px] bg-gray-50/50 rounded-[2rem] md:rounded-[4rem] border border-gray-200 mx-auto relative overflow-hidden shadow-sm">
+          <div className="absolute inset-0 modern-jali opacity-[0.02]" />
           <MindMap />
         </div>
       </section>
 
-      <footer className="py-40 pb-20 px-8 text-center bg-white">
-        <div className="max-w-4xl mx-auto space-y-24">
-          <h2 className="text-8xl md:text-[12rem] font-black tracking-tighter uppercase leading-[0.8]">
+      <footer className="py-20 md:py-40 pb-20 px-4 sm:px-8 text-center bg-white border-t border-gray-100">
+        <div className="max-w-4xl mx-auto space-y-16 sm:space-y-24">
+          <h2 className="text-4xl xs:text-5xl sm:text-7xl md:text-[10rem] lg:text-[12rem] font-black tracking-tighter uppercase leading-[0.8] break-words">
             <Typewriter text="Let's Launch." delay={500} />
           </h2>
 
-          <div className="flex flex-col items-center space-y-12">
-            <button
-              onClick={() => setIsCoffeeOpen(true)}
-              className="group cursor-pointer appearance-none border-none bg-transparent"
-            >
-              <div className="px-12 py-5 bg-black text-white rounded-full font-black uppercase tracking-[0.4em] text-xs shadow-2xl transition-all group-hover:scale-105 group-hover:bg-[#ff3e00]">
-                Don’t hesitate, let’s talk over coffee.
+          <div className="flex flex-col items-center space-y-6 w-full max-w-2xl mx-auto">
+            {/* Clickable Integrated Tab Bar */}
+            <div className="w-full px-6 sm:px-12 py-6 sm:py-8 bg-black text-white hover:border-[#ff3e00]/30 rounded-3xl md:rounded-full border border-white/10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300">
+              <span className="font-serif italic text-lg sm:text-xl font-normal text-white/95 text-center md:text-left">
+                Don’t hesitate. Let’s discuss over coffee.
+              </span>
+              
+              {/* Connected Options inside the unified tab */}
+              <div className="flex flex-col sm:flex-row items-center gap-3 font-mono text-[10px] sm:text-xs uppercase font-black tracking-widest text-gray-400">
+                <span className="opacity-75">Connect Directly:</span>
+                <div className="flex items-center gap-3">
+                  <a
+                    href="mailto:nupurrajoria@gmail.com?subject=Let's%20discuss%20over%20coffee"
+                    className="font-black text-white hover:text-[#ff3e00] border-b border-white/25 hover:border-[#ff3e00] pb-0.5 transition-all"
+                  >
+                    nupurrajoria@gmail.com
+                  </a>
+                  <span className="text-gray-600">|</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText("nupurrajoria@gmail.com");
+                      setShowCoffeeToast(true);
+                      setTimeout(() => setShowCoffeeToast(false), 3500);
+                    }}
+                    className="text-[10px] font-black uppercase tracking-widest text-[#ff3e00] hover:text-white cursor-pointer transition-colors"
+                  >
+                    Copy email
+                  </button>
+                </div>
               </div>
-            </button>
+            </div>
           </div>
 
           <div className="pt-20 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-[9px] font-black uppercase tracking-widest text-gray-400 gap-8">
@@ -1690,6 +1396,21 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Coffee Dialogue Copy Feedback Toast */}
+      <AnimatePresence>
+        {showCoffeeToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[200] px-6 py-3.5 bg-black text-white rounded-full font-mono text-[10px] uppercase font-black tracking-widest border border-white/10 shadow-2xl flex items-center gap-3 whitespace-nowrap"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Email copied to clipboard (nupurrajoria@gmail.com)</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -1817,13 +1538,6 @@ function MindMap() {
         side: "bottom",
       },
       {
-        id: "Pinterest",
-        group: 3,
-        size: 7,
-        color: "#ec4899",
-        side: "bottom",
-      },
-      {
         id: "Google Ads",
         group: 3,
         size: 7,
@@ -1926,7 +1640,6 @@ function MindMap() {
       // Bottom channels connected to main strategy node
       { source: "Strategy", target: "Instagram" },
       { source: "Strategy", target: "LinkedIn" },
-      { source: "Strategy", target: "Pinterest" },
       { source: "Strategy", target: "Google Ads" },
       { source: "Strategy", target: "Newspaper Publications" },
       { source: "Strategy", target: "In-Store Marketing" },
@@ -2002,7 +1715,7 @@ function MindMap() {
       .data(linksCopy)
       .enter()
       .append("line")
-      .attr("stroke", "rgba(255,255,255,0.12)")
+      .attr("stroke", "rgba(0,0,0,0.08)")
       .attr("stroke-width", 1.5);
 
     const node = svg
@@ -2045,29 +1758,31 @@ function MindMap() {
       .attr("dx", (d) => d.size + 8)
       .attr("dy", ".35em")
       .text((d) => d.id)
-      .attr("fill", "rgba(255,255,255,0.85)")
-      .attr("font-size", "10px")
+      .attr("fill", "#0f0f0f")
+      .attr("font-size", "9px")
       .attr("font-family", "Inter, sans-serif")
-      .attr("font-weight", "700")
+      .attr("font-weight", "800")
       .attr("text-transform", "uppercase")
-      .attr("letter-spacing", "0.1em")
+      .attr("letter-spacing", "0.08em")
       .style("pointer-events", "none")
-      .style("opacity", (d: any) => (d.group === 0 ? 1 : 0.65));
+      .style("opacity", (d: any) => (d.group === 0 ? 1 : 0.70));
 
     simulation.on("tick", () => {
       // Keep nodes beautifully bound inside view limits
       nodesCopy.forEach((d: any) => {
-        d.x = Math.max(d.size + 15, Math.min(width - d.size - 130, d.x));
-        d.y = Math.max(d.size + 15, Math.min(height - d.size - 15, d.y));
+        const xVal = typeof d.x === "number" ? d.x : (width / 2);
+        const yVal = typeof d.y === "number" ? d.y : (height / 2);
+        d.x = Math.max(d.size + 15, Math.min(width - d.size - 130, xVal));
+        d.y = Math.max(d.size + 15, Math.min(height - d.size - 15, yVal));
       });
 
       link
-        .attr("x1", (d: any) => d.source.x)
-        .attr("y1", (d: any) => d.source.y)
-        .attr("x2", (d: any) => d.target.x)
-        .attr("y2", (d: any) => d.target.y);
+        .attr("x1", (d: any) => (d.source && typeof d.source === "object" ? d.source.x : 0))
+        .attr("y1", (d: any) => (d.source && typeof d.source === "object" ? d.source.y : 0))
+        .attr("x2", (d: any) => (d.target && typeof d.target === "object" ? d.target.x : 0))
+        .attr("y2", (d: any) => (d.target && typeof d.target === "object" ? d.target.y : 0));
 
-      node.attr("transform", (d: any) => `translate(${d.x},${d.y})`);
+      node.attr("transform", (d: any) => `translate(${typeof d.x === "number" ? d.x : 0},${typeof d.y === "number" ? d.y : 0})`);
     });
 
     return () => {
@@ -2079,40 +1794,40 @@ function MindMap() {
     <div ref={containerRef} className="w-full h-full min-h-[500px] relative">
       {/* Absolute Left Label */}
       <div className="absolute top-8 left-8 pointer-events-none select-none text-left space-y-1 z-10">
-        <span className="text-[9px] font-black uppercase text-[#00d2ff] tracking-[0.3em] block">
+        <span className="text-[9px] font-black uppercase text-[#0077b5] tracking-[0.3em] block">
           Technical Skillset
         </span>
-        <span className="text-[8px] font-mono uppercase tracking-widest text-white/30 block">
+        <span className="text-[8px] font-mono uppercase tracking-widest text-gray-400 block">
           Campaign Systems
         </span>
       </div>
 
       {/* Absolute Right Label */}
       <div className="absolute top-8 right-8 pointer-events-none select-none text-right space-y-1 z-10">
-        <span className="text-[9px] font-black uppercase text-[#ff9f00] tracking-[0.3em] block">
+        <span className="text-[9px] font-black uppercase text-[#d97706] tracking-[0.3em] block">
           Target Demographics
         </span>
-        <span className="text-[8px] font-mono uppercase tracking-widest text-white/30 block">
+        <span className="text-[8px] font-mono uppercase tracking-widest text-gray-400 block">
           Audience Activation
         </span>
       </div>
 
       {/* Absolute Top Label */}
       <div className="absolute top-8 left-1/2 -translate-x-1/2 pointer-events-none select-none text-center space-y-1 z-10">
-        <span className="text-[9px] font-black uppercase text-[#10b981] tracking-[0.3em] block">
+        <span className="text-[9px] font-black uppercase text-[#059669] tracking-[0.3em] block">
           Strategic Tools Stack
         </span>
-        <span className="text-[8px] font-mono uppercase tracking-widest text-white/30 block">
+        <span className="text-[8px] font-mono uppercase tracking-widest text-gray-400 block">
           Software & Automation
         </span>
       </div>
 
       {/* Absolute Bottom Label */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none select-none text-center space-y-1 z-10">
-        <span className="text-[9px] font-black uppercase text-[#ec4899] tracking-[0.3em] block">
+        <span className="text-[9px] font-black uppercase text-[#db2777] tracking-[0.3em] block">
           Omnichannel Delivery
         </span>
-        <span className="text-[8px] font-mono uppercase tracking-widest text-white/30 block">
+        <span className="text-[8px] font-mono uppercase tracking-widest text-gray-400 block">
           Media & Channels
         </span>
       </div>

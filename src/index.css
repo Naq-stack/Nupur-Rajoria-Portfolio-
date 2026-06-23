@@ -7,6 +7,8 @@
   --font-script: "Pinyon Script", cursive;
   --font-cormorant: "Cormorant Garamond", serif;
 
+  --breakpoint-xs: 380px;
+
   --color-fusion-bg: #ffffff;
   --color-fusion-ink: #000000;
   --color-fusion-accent: #ff3e00; /* Campaign Red */
