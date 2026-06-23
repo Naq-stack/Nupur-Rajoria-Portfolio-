@@ -1773,7 +1773,7 @@ export default function App() {
           </div>
 
           <div className="pt-20 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-[9px] font-black uppercase tracking-widest text-gray-400 gap-8">
-            <div>© 2026 POWERFUL NARRATIVE - LONDON</div>
+            <div>©N.R. Portfolio.</div>
             <div className="flex space-x-12">
               <a
                 href="https://linkedin.com/in/nupurrajoria/"
@@ -1782,15 +1782,6 @@ export default function App() {
                 className="text-black hover:opacity-75 flex items-center gap-1"
               >
                 <Linkedin size={10} /> LinkedIn
-              </a>
-              <a href="#" className="hover:text-black">
-                Privacy
-              </a>
-              <a href="#" className="hover:text-black">
-                Terms
-              </a>
-              <a href="#" className="hover:text-black">
-                Archive
               </a>
             </div>
           </div>
