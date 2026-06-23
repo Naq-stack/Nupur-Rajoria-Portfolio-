@@ -42,6 +42,7 @@ import {
   Check,
   AlertCircle,
   Play,
+  Github,
 } from "lucide-react";
 import * as d3 from "d3";
 import { put } from "@vercel/blob";
@@ -105,7 +106,15 @@ const Navbar = () => (
       </a>
     </div>
     <div className="flex items-center space-x-4">
-      {/* Resume Button Removed */}
+      <a
+        href="https://github.com/Naq-stack/marketing_portfolio.git"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center space-x-2 px-4 py-2 bg-black text-white hover:bg-fusion-accent rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-300 transform hover:scale-[1.02] shadow-sm"
+      >
+        <Github size={12} />
+        <span>GITHUB REPO</span>
+      </a>
     </div>
   </nav>
 );
@@ -1728,7 +1737,7 @@ export default function App() {
               className="group cursor-pointer appearance-none border-none bg-transparent w-full"
             >
               <div className="w-full px-8 py-5 bg-black text-white hover:bg-fusion-accent rounded-full font-black uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[10px] sm:text-xs shadow-2xl transition-all duration-300 transform group-hover:scale-[1.02] flex items-center justify-center">
-                Don’t hesitate. Let’s discuss over coffee.
+                Don’t hesitate, let’s talk.
               </div>
             </button>
 
@@ -1764,6 +1773,15 @@ export default function App() {
                       >
                         COPY EMAIL
                       </button>
+                      <span className="text-gray-300 hidden sm:inline">|</span>
+                      <a
+                        href="https://github.com/Naq-stack/marketing_portfolio.git"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-black text-gray-950 hover:text-fusion-accent border-b border-gray-950/20 hover:border-fusion-accent pb-0.5 transition-colors uppercase tracking-wider flex items-center gap-1"
+                      >
+                        <Github size={11} /> GITHUB PORTFOLIO
+                      </a>
                     </div>
                   </div>
                 </motion.div>
@@ -1774,6 +1792,14 @@ export default function App() {
           <div className="pt-20 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-[9px] font-black uppercase tracking-widest text-gray-400 gap-8">
             <div>© 2026 POWERFUL NARRATIVE - LONDON</div>
             <div className="flex space-x-12">
+              <a
+                href="https://github.com/Naq-stack/marketing_portfolio.git"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-black flex items-center gap-1"
+              >
+                <Github size={10} /> GitHub
+              </a>
               <a href="#" className="hover:text-black">
                 Privacy
               </a>
