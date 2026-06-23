@@ -1393,7 +1393,7 @@ export default function App() {
                   <div className="space-y-12">
                     <div className="space-y-4">
                       <div className="campaign-tag w-fit bg-black text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">B2B2C NATIONWIDE DRIVE</div>
-                      <h3 className="font-serif text-3xl font-black italic tracking-tight leading-none uppercase">
+                      <h3 className="font-serif text-3xl font-bold leading-none tracking-tight hover:text-[#ff3e00] transition-colors cursor-default uppercase">
                         MASS ENGAGEMENT
                       </h3>
                     </div>
@@ -1765,15 +1765,6 @@ export default function App() {
                       >
                         COPY EMAIL
                       </button>
-                      <span className="text-gray-300 hidden sm:inline">|</span>
-                      <a
-                        href="https://github.com/Naq-stack/marketing_portfolio.git"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-black text-gray-950 hover:text-fusion-accent border-b border-gray-950/20 hover:border-fusion-accent pb-0.5 transition-colors uppercase tracking-wider flex items-center gap-1"
-                      >
-                        <Github size={11} /> GITHUB PORTFOLIO
-                      </a>
                     </div>
                   </div>
                 </motion.div>
@@ -1785,12 +1776,12 @@ export default function App() {
             <div>© 2026 POWERFUL NARRATIVE - LONDON</div>
             <div className="flex space-x-12">
               <a
-                href="https://github.com/Naq-stack/marketing_portfolio.git"
+                href="https://linkedin.com/in/nupurrajoria/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-black flex items-center gap-1"
+                className="text-black hover:opacity-75 flex items-center gap-1"
               >
-                <Github size={10} /> GitHub
+                <Linkedin size={10} /> LinkedIn
               </a>
               <a href="#" className="hover:text-black">
                 Privacy
