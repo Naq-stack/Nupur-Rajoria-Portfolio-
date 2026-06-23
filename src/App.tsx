@@ -394,42 +394,42 @@ const getMediaDetails = (label: string) => {
     case "ENGAGEMENT GAP":
       return {
         image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=600&auto=format&fit=crop",
-        gradient: "from-[#faf5f5]/95 to-[#f5eae8]/95",
-        color: "text-gray-900",
+        gradient: "from-amber-500/15 via-red-500/10 to-transparent",
+        color: "text-gray-950",
       };
     case "AUTHENTIC STUDENT JOURNEY":
     case "AUTHENTIC STUDENT LIFE":
       return {
         image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5c?q=80&w=600&auto=format&fit=crop",
-        gradient: "from-[#fafaf7]/95 to-[#f5f0e6]/95",
-        color: "text-gray-900",
+        gradient: "from-amber-500/15 via-orange-500/10 to-transparent",
+        color: "text-gray-950",
       };
     case "WORKFLOW STANDARDIZATION":
     case "DATA-DRIVEN DEPLOYMENT":
       return {
         image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=600&auto=format&fit=crop",
-        gradient: "from-[#f4f7fa]/95 to-[#e6edf5]/95",
-        color: "text-gray-900",
+        gradient: "from-[#0077b5]/15 via-blue-500/10 to-transparent",
+        color: "text-gray-950",
       };
     case "PEER VALIDATION ROI":
     case "PEER VALIDATION":
       return {
         image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=600&auto=format&fit=crop",
-        gradient: "from-[#f2faf7]/95 to-[#e2f5ec]/95",
-        color: "text-gray-900",
+        gradient: "from-emerald-500/15 via-teal-500/10 to-transparent",
+        color: "text-gray-950",
       };
     case "REPLICABLE BLUEPRINT":
     case "FUTURE BLUEPRINT":
       return {
         image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=600&auto=format&fit=crop",
-        gradient: "from-[#faf9fc]/95 to-[#eae7f5]/95",
-        color: "text-gray-900",
+        gradient: "from-purple-500/15 via-violet-500/10 to-transparent",
+        color: "text-gray-950",
       };
     default:
       return {
         image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=600&auto=format&fit=crop",
-        gradient: "from-[#fcfcfc]/95 to-[#f5f5f5]/95",
-        color: "text-gray-900",
+        gradient: "from-gray-500/10 to-transparent",
+        color: "text-gray-950",
       };
   }
 };
@@ -446,14 +446,14 @@ const InstaMedia = ({
   const media = getMediaDetails(label);
 
   return (
-    <div className="w-full h-full text-gray-900 border border-gray-100 flex flex-col justify-between p-5 text-center relative overflow-hidden select-none bg-white">
+    <div className="w-full h-full text-gray-900 border border-gray-150 flex flex-col justify-between p-4 sm:p-5 text-center relative overflow-hidden select-none bg-gray-50">
       {/* Background Image with ReferrerPolicy No-Referrer */}
       {media.image && (
         <img
           src={media.image}
           alt={label}
           referrerPolicy="no-referrer"
-          className="absolute inset-0 w-full h-full object-cover z-0 grayscale opacity-45"
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-90 group-hover:scale-105 transition-transform duration-500"
         />
       )}
       {/* Gradient Overlay for high-end text readability */}
@@ -461,29 +461,31 @@ const InstaMedia = ({
       
       {/* Background paper texture & subtle grid line */}
       <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none z-20"
+        className="absolute inset-0 opacity-[0.02] pointer-events-none z-20"
         style={{
           backgroundImage:
             "radial-gradient(circle at 1px 1px, #000 1px, transparent 0)",
           backgroundSize: "16px 16px",
         }}
       />
-      <div className="absolute inset-0 border border-black/[0.04] pointer-events-none m-2 z-20" />
+      <div className="absolute inset-0 border border-white/20 pointer-events-none m-2 z-20" />
 
-      {/* Card Header Tag - Consistent across all cards */}
-      <span className="font-mono text-[8px] font-black uppercase text-[#ff3e00] tracking-[0.3em] block relative z-20">
-        Phase {String(i).padStart(2, "0")}
-      </span>
-
-      {/* Graphical Showcase - Centered illustration */}
-      <div className="flex-1 w-full flex items-center justify-center relative z-20 py-2 overflow-hidden">
-        {/* Overlays removed to keep photos clean and pristine as requested */}
+      {/* Card Header Tag - Consistent across all cards with backdrop blur for ultra contrast */}
+      <div className="relative z-20 self-center">
+        <span className="font-mono text-[8px] sm:text-[9px] font-black uppercase text-[#ff3e00] tracking-[0.3em] px-2.5 py-1 bg-white/95 backdrop-blur-md rounded-full shadow-xs border border-gray-200/50">
+          Phase {String(i).padStart(2, "0")}
+        </span>
       </div>
 
-      {/* Card Footer Label */}
-      <span className="font-black text-[9px] uppercase tracking-[0.25em] text-gray-900 leading-tight block relative z-20 md:px-2">
-        {label}
-      </span>
+      {/* Graphical Showcase - Centered placeholder to align spacing */}
+      <div className="flex-1 w-full flex items-center justify-center relative z-20 py-2 overflow-hidden" />
+
+      {/* Card Footer Label with premium backdrop filter capsule */}
+      <div className="relative z-20 w-full">
+        <span className="font-black text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-gray-950 leading-tight inline-block px-3 py-2 bg-white/95 backdrop-blur-md rounded-xl shadow-xs border border-gray-200/50 w-full">
+          {label}
+        </span>
+      </div>
     </div>
   );
 };
@@ -587,13 +589,13 @@ const InstaFeedModal = ({
         <div
           ref={containerRef}
           onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-2xl h-screen md:h-[90vh] overflow-y-auto space-y-8 py-10 md:py-16 px-4 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent scroll-smooth snap-y snap-mandatory"
+          className="w-full max-w-2xl h-screen md:h-[90vh] overflow-y-auto space-y-8 py-10 md:py-16 px-4 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent scroll-smooth"
         >
           {posts.map((post, idx) => (
             <div
               key={post.id}
               id={`insta-feed-post-${idx}`}
-              className="bg-white rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl w-full border border-gray-150 min-h-[500px] snap-start"
+              className="bg-white rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl w-full border border-gray-150 min-h-[500px]"
             >
               {/* Media Section */}
               <div className="w-full md:w-[350px] aspect-square relative shrink-0">
@@ -736,6 +738,7 @@ export default function App() {
   >(null);
   const [activeCaseIndex, setActiveCaseIndex] = useState(0);
   const [showCoffeeToast, setShowCoffeeToast] = useState(false);
+  const [isContactOptionsOpen, setIsContactOptionsOpen] = useState(false);
 
   const handleCoffeeClick = () => {
     navigator.clipboard.writeText("nupurrajoria@gmail.com");
@@ -1347,37 +1350,54 @@ export default function App() {
             <Typewriter text="Let's Launch." delay={500} />
           </h2>
 
-          <div className="flex flex-col items-center space-y-6 w-full max-w-2xl mx-auto">
-            {/* Clickable Integrated Tab Bar */}
-            <div className="w-full px-6 sm:px-12 py-6 sm:py-8 bg-black text-white hover:border-[#ff3e00]/30 rounded-3xl md:rounded-full border border-white/10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300">
-              <span className="font-serif italic text-lg sm:text-xl font-normal text-white/95 text-center md:text-left">
+          <div className="flex flex-col items-center space-y-4 w-full max-w-md mx-auto">
+            {/* Clickable Simple Button Tab */}
+            <button
+              onClick={() => setIsContactOptionsOpen(!isContactOptionsOpen)}
+              className="group cursor-pointer appearance-none border-none bg-transparent w-full"
+            >
+              <div className="w-full px-8 py-5 bg-black text-white hover:bg-fusion-accent rounded-full font-black uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[10px] sm:text-xs shadow-2xl transition-all duration-300 transform group-hover:scale-[1.02] flex items-center justify-center">
                 Don’t hesitate. Let’s discuss over coffee.
-              </span>
-              
-              {/* Connected Options inside the unified tab */}
-              <div className="flex flex-col sm:flex-row items-center gap-3 font-mono text-[10px] sm:text-xs uppercase font-black tracking-widest text-gray-400">
-                <span className="opacity-75">Connect Directly:</span>
-                <div className="flex items-center gap-3">
-                  <a
-                    href="mailto:nupurrajoria@gmail.com?subject=Let's%20discuss%20over%20coffee"
-                    className="font-black text-white hover:text-[#ff3e00] border-b border-white/25 hover:border-[#ff3e00] pb-0.5 transition-all"
-                  >
-                    nupurrajoria@gmail.com
-                  </a>
-                  <span className="text-gray-600">|</span>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText("nupurrajoria@gmail.com");
-                      setShowCoffeeToast(true);
-                      setTimeout(() => setShowCoffeeToast(false), 3500);
-                    }}
-                    className="text-[10px] font-black uppercase tracking-widest text-[#ff3e00] hover:text-white cursor-pointer transition-colors"
-                  >
-                    Copy email
-                  </button>
-                </div>
               </div>
-            </div>
+            </button>
+
+            {/* Expandable Options Panel */}
+            <AnimatePresence>
+              {isContactOptionsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, y: -8, height: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  className="w-full bg-gray-50 border border-gray-150 rounded-2xl p-5 shadow-inner mt-2 overflow-hidden"
+                >
+                  <div className="flex flex-col items-center space-y-3 text-center">
+                    <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-gray-400 block font-bold">
+                      Connect Directly:
+                    </span>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 font-mono text-[11px] sm:text-xs">
+                      <a
+                        href="mailto:nupurrajoria@gmail.com?subject=Let's%20discuss%20over%20coffee"
+                        className="font-black text-gray-950 hover:text-fusion-accent border-b border-gray-950/20 hover:border-fusion-accent pb-0.5 transition-colors uppercase tracking-wider"
+                      >
+                        nupurrajoria@gmail.com
+                      </a>
+                      <span className="text-gray-300 hidden sm:inline">|</span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText("nupurrajoria@gmail.com");
+                          setShowCoffeeToast(true);
+                          setTimeout(() => setShowCoffeeToast(false), 3500);
+                        }}
+                        className="text-[10px] font-black uppercase tracking-widest text-[#ff3e00] hover:text-black cursor-pointer transition-colors"
+                      >
+                        COPY EMAIL
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           <div className="pt-20 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-[9px] font-black uppercase tracking-widest text-gray-400 gap-8">
