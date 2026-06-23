@@ -106,15 +106,7 @@ const Navbar = () => (
       </a>
     </div>
     <div className="flex items-center space-x-4">
-      <a
-        href="https://github.com/Naq-stack/marketing_portfolio.git"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center space-x-2 px-4 py-2 bg-black text-white hover:bg-fusion-accent rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-300 transform hover:scale-[1.02] shadow-sm"
-      >
-        <Github size={12} />
-        <span>GITHUB REPO</span>
-      </a>
+      {/* Resume Button Removed */}
     </div>
   </nav>
 );
